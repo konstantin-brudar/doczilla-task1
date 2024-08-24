@@ -18,7 +18,11 @@ public class TextFilesConcatenator {
         final String OUTPUT_FILE = args[1];
         try {
             List<String> fileList = getAllFiles(ROOT_DIR);
-            getRequirements(fileList.get(0)).forEach(System.out::println);
+            Map<String, List<String>> dependencies = getDependencies(fileList);
+            for (var file : dependencies.entrySet()) {
+                System.out.println(file.getKey() + ":\n");
+                file.getValue().forEach(System.out::println);
+            }
             concatenateFiles(fileList, OUTPUT_FILE);
         } catch (IOException e) {
             System.err.println(e);
@@ -62,5 +66,14 @@ public class TextFilesConcatenator {
             }
         }
         return requires;
+    }
+
+    private static Map<String, List<String>> getDependencies(List<String> fileList) throws IOException {
+        Map<String, List<String>> dependencies = new HashMap<>();
+        for (String file : fileList) {
+            List<String> requires = getRequirements(file);
+            dependencies.put(file, requires);
+        }
+        return dependencies;
     }
 }
