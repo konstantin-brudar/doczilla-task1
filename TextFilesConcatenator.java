@@ -19,10 +19,8 @@ public class TextFilesConcatenator {
         try {
             List<String> fileList = getAllFiles(ROOT_DIR);
             Map<String, List<String>> dependencies = getDependencies(fileList);
-            for (var file : dependencies.entrySet()) {
-                System.out.println(file.getKey() + ":\n");
-                file.getValue().forEach(System.out::println);
-            }
+            Graph dependenciesGraph = new Graph(dependencies);
+            dependenciesGraph.print();
             concatenateFiles(fileList, OUTPUT_FILE);
         } catch (IOException e) {
             System.err.println(e);
