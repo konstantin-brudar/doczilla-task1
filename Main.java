@@ -24,8 +24,11 @@ public class Main {
     private static List<String> getAllFiles(String rootDir) throws IOException {
         List<String> fileList = new ArrayList<>();
         Files.walk(Paths.get(rootDir))
-             .map(Path::toString)
-             .forEach(fileList::add);
+            .filter(Files::isRegularFile)
+            .filter(path -> path.toString().endsWith(".txt"))
+            .map(Path::toString)
+            .sorted()
+            .forEach(fileList::add);
         return fileList;
     }
 }
