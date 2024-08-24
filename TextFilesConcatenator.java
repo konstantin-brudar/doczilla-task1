@@ -18,6 +18,7 @@ public class TextFilesConcatenator {
         final String OUTPUT_FILE = args[1];
         try {
             List<String> fileList = getAllFiles(ROOT_DIR);
+            getRequirements(fileList.get(0)).forEach(System.out::println);
             concatenateFiles(fileList, OUTPUT_FILE);
         } catch (IOException e) {
             System.err.println(e);
@@ -47,5 +48,19 @@ public class TextFilesConcatenator {
                 }
             }
         }
+    }
+
+    private static List<String> getRequirements(String file) throws IOException {
+        List<String> requires = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("require")) {
+                    String path = line.substring(line.indexOf("'") + 1, line.lastIndexOf("'"));
+                    requires.add(path);
+                }
+            }
+        }
+        return requires;
     }
 }
