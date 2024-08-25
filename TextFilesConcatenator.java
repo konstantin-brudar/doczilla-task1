@@ -20,8 +20,9 @@ public class TextFilesConcatenator {
             List<String> fileList = getAllFiles(ROOT_DIR);
             Map<String, List<String>> dependencies = getDependencies(fileList);
             Graph dependenciesGraph = new Graph(dependencies);
-            dependenciesGraph.print();
-            concatenateFiles(fileList, OUTPUT_FILE);
+            List<String> sortedFileList = dependenciesGraph.sort();
+            sortedFileList.forEach(System.out::println);
+            concatenateFiles(sortedFileList, OUTPUT_FILE);
         } catch (IOException e) {
             System.err.println(e);
         }
